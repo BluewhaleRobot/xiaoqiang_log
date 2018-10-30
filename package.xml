@@ -1,0 +1,21 @@
+<package format="2">
+  <name>xiaoqiang_log</name>
+  <version>0.0.1</version>
+  <description>
+     xiaoqiang log package, log events to local and remote
+  </description>
+  <license>MIT</license>
+  <author email="randoms@bwbot.org">Randoms</author>
+  <maintainer email="randoms@bwbot.org">Randoms</maintainer>
+  <url type="website">http://github.com/bluewhalerobot/xiaoqiang_log</url>
+  <url type="bugtracker">https://github.com/bluewhalerobot/xiaoqiang_log/issues</url>
+  <url type="repository">https://github.com/bluewhalerobot/xiaoqiang_log</url>
+  
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>message_generation</build_depend>
+  <depend>roscpp</depend>
+  <depend>rospy</depend>
+  <depend>std_msgs</depend>
+  <depend>mongodb</depend>
+  <depend>python-pymongo</depend>
+</package>
