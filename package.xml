@@ -18,4 +18,6 @@
   <depend>std_msgs</depend>
   <depend>mongodb</depend>
   <depend>python-pymongo</depend>
+  <depend>python-webpy</depend>
+  <depend>python-requests</depend>
 </package>

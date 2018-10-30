@@ -12,8 +12,7 @@ if __name__ == "__main__":
     rospy.init_node("xiaoqiang_logger_client")
     # reset database
     c = MongoClient()
-    db = c[rospy.get_param("database_name", "xiaoqiang_log")]
-    db["debug"].drop()
+    db = c[rospy.get_param("~database_name", "xiaoqiang_log")]
     # pub record to logger
     pub = rospy.Publisher("/xiaoqiang_log", LogRecord, queue_size=10)
     time.sleep(1)
