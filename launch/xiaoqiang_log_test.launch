@@ -1,0 +1,4 @@
+<launch>
+    <include file="$(find xiaoqiang_log)/launch/xiaoqiang_log.launch" />
+    <node name="xiaoqiang_logger_client" pkg="xiaoqiang_log" type="xiaoqiang_log_client.py" output="screen"/>
+</launch>

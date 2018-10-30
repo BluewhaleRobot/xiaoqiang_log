@@ -1,0 +1,6 @@
+<launch>
+    <node name="xiaoqiang_logger_node" pkg="xiaoqiang_log" type="xiaoqiang_log_node.py">
+        <!-- 数据库名称 -->
+        <param name="database_name" value="xiaoqiang_log" />
+    </node>
+</launch>
