@@ -13,6 +13,7 @@ if __name__ == "__main__":
     # reset database
     c = MongoClient()
     db = c[rospy.get_param("~database_name", "xiaoqiang_log")]
+    db["debug"].drop()
     # pub record to logger
     pub = rospy.Publisher("/xiaoqiang_log", LogRecord, queue_size=10)
     time.sleep(1)
@@ -29,3 +30,7 @@ if __name__ == "__main__":
     else:
         rospy.loginfo(json.dumps(db["debug"].find_one(),
                               indent=4, default=json_util.default))
+    while not rospy.is_shutdown():
+        time.sleep(1)
+        record.stamp = rospy.Time.now()
+        pub.publish(record)
