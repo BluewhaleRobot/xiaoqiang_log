@@ -58,8 +58,8 @@ def insert_log_record(record):
             rospy.logwarn("some records failed to insert")
 
     except Exception as e:
-        rospy.logwarn("Connect to remote server failed")
-        rospy.logwarn(e)
+        rospy.loginfo("Connect to remote server failed")
+        rospy.loginfo(e)
 
 
 if __name__ == "__main__":
