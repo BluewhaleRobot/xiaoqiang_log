@@ -13,7 +13,8 @@ from xiaoqiang_log.msg import LogRecord
 c = MongoClient()
 database_name = rospy.get_param("~database_name", "xiaoqiang_log")
 db = c[database_name]
-
+CODE_NAME = rospy.get_param('/galileo/code_name', "")
+VERSION = rospy.get_param('/galileo/version', "0.0.0")
 
 def get_id(sharplink_log):
     log_file = open(sharplink_log)
@@ -25,6 +26,7 @@ def get_id(sharplink_log):
 
 
 def insert_log_record(record):
+    global CODE_NAME
     db[record.collection_name].insert({
         "timestamp": record.stamp.to_nsec() / 1000 / 1000,
         "record": json.loads(record.record)
@@ -51,6 +53,8 @@ def insert_log_record(record):
         for data in data_to_send:
             data["collection"] = record.collection_name
             data["record"]["id"] = get_id(sharplink_log)
+            data["record"]["version"] = VERSION
+            data["record"]["codename"] = CODE_NAME
         # send data to server
         res = requests.post(server_url, json=data_to_send)
         res = json.loads(res.content.decode("utf-8"))

@@ -5,11 +5,11 @@ import json
 import time
 
 import pymongo
-import rospy
 import web
 from bson import json_util
 from pymongo import MongoClient
 import threading
+import requests
 
 c = MongoClient()
 db = c["xiaoqiang_log_server"]
@@ -61,14 +61,24 @@ class index:
                 continue
             # 保存数据
             received_record["record"]["timestamp"] = received_record["timestamp"]
+            received_record["record"]["ip"] = web.ctx.ip
+            received_record["record"]["location"] = self.get_phy_addr(web.ctx.ip)
             db[received_record["collection"]].insert(received_record["record"])
             inserted_records.append(received_record["record"])
         return json.dumps(inserted_records, indent=4, default=json_util.default)
 
+    def get_phy_addr(self, ip):
+        try:
+            req = requests.post("http://xiaoqiang.bwbot.org/ips", data={"ip": ip})
+        except Exception:
+            print(req.content.decode("utf-8"))
+            return ""
+        if req.json()[0] is None:
+            return ""
+        return req.json()[0]
 
 if __name__ == "__main__":
-    rospy.init_node("xiaoqiang_log_remote")
     app = web.application(urls, globals())
     threading._start_new_thread(app.run, ())
-    while not rospy.is_shutdown():
+    while True:
         time.sleep(1)
