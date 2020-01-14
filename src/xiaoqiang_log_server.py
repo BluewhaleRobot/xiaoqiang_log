@@ -23,7 +23,7 @@ class index:
 
     def GET(self):
         user_data = web.input()
-        if not user_data.has_key("id") or not user_data.has_key("collection"):
+        if "id" not in user_data or "collection" not in user_data:
             return json.dumps({
                 "status": "error",
                 "description": "id and collection is required"
@@ -35,10 +35,11 @@ class index:
         return json.dumps(record, default=json_util.default)
 
     def POST(self):
-        data = web.data()
+        data = web.data().decode("utf-8")
         try:
             data = json.loads(data)
-        except Exception:
+        except Exception as e:
+            print(e)
             data = None
         if data is None:
             return json.dumps({
@@ -61,8 +62,8 @@ class index:
                 continue
             # 保存数据
             received_record["record"]["timestamp"] = received_record["timestamp"]
-            received_record["record"]["ip"] = web.ctx.ip
-            received_record["record"]["location"] = self.get_phy_addr(web.ctx.ip)
+            received_record["record"]["ip"] = web.ctx.env.get('HTTP_X_FORWARDED_FOR')
+            received_record["record"]["location"] = self.get_phy_addr(received_record["record"]["ip"])
             db[received_record["collection"]].insert(received_record["record"])
             inserted_records.append(received_record["record"])
         return json.dumps(inserted_records, indent=4, default=json_util.default)
@@ -71,7 +72,6 @@ class index:
         try:
             req = requests.post("http://xiaoqiang.bwbot.org/ips", data={"ip": ip})
         except Exception:
-            print(req.content.decode("utf-8"))
             return ""
         if req.json()[0] is None:
             return ""

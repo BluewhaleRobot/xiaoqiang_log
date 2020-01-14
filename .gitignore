@@ -1,2 +1,6 @@
 *.pyc
 .vscode
+.conf
+venv
+*.service
+start.sh
