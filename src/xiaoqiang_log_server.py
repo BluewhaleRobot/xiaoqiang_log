@@ -48,6 +48,7 @@ class index:
             })
 
         inserted_records = []
+        timestamps = {}
         for received_record in data:
             # 检查数据格式
             if "timestamp" not in received_record or "collection" not in received_record or "record" not in received_record:
@@ -55,10 +56,13 @@ class index:
             if "id" not in received_record["record"]:
                 continue
             # 查找到最新的时间戳
-            db_record = db[received_record["collection"]].find_one({"id": received_record["record"]["id"]}, sort=[
-                ("timestamp", pymongo.DESCENDING)])
+            if received_record["collection"] not in timestamps:
+                db_record = db[received_record["collection"]].find_one({"id": received_record["record"]["id"]}, sort=[
+                    ("timestamp", pymongo.DESCENDING)])
+                if db_record is not None:
+                    timestamps[received_record["collection"]] = db_record["timestamp"]
             # 收到数据并不比本地数据新
-            if db_record is not None and db_record["timestamp"] > received_record["timestamp"]:
+            if received_record["collection"] in timestamps and timestamps[received_record["collection"]] > received_record["timestamp"]:
                 continue
             # 保存数据
             received_record["record"]["timestamp"] = received_record["timestamp"]
