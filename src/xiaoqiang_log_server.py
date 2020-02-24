@@ -10,6 +10,7 @@ from bson import json_util
 from pymongo import MongoClient
 import threading
 import requests
+from functools import lru_cache
 
 c = MongoClient()
 db = c["xiaoqiang_log_server"]
@@ -72,6 +73,7 @@ class index:
             inserted_records.append(received_record["record"])
         return json.dumps(inserted_records, indent=4, default=json_util.default)
 
+    @lru_cache(maxsize=1024*1024)
     def get_phy_addr(self, ip):
         try:
             req = requests.post("http://xiaoqiang.bwbot.org/ips", data={"ip": ip})
