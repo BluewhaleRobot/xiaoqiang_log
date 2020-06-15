@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # encoding=utf-8
 
 import json
@@ -27,7 +27,7 @@ def get_id(sharplink_log):
 
 def insert_log_record(record):
     global CODE_NAME
-    db[record.collection_name].insert({
+    db[record.collection_name].insert_one({
         "timestamp": record.stamp.to_nsec() / 1000 / 1000,
         "record": json.loads(record.record)
     })
