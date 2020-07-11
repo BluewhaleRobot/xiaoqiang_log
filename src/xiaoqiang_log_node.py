@@ -71,4 +71,6 @@ if __name__ == "__main__":
     sub = rospy.Subscriber("/xiaoqiang_log", LogRecord,
                            insert_log_record, queue_size=10)
     while not rospy.is_shutdown():
-        time.sleep(1)
+        CODE_NAME = rospy.get_param('/galileo/code_name', "")
+        VERSION = rospy.get_param('/galileo/version', "0.0.0")
+        time.sleep(5)
